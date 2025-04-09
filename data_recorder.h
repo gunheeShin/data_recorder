@@ -51,7 +51,7 @@ public:
     void savePose();
     void savePoseWithCov();
 
-    void init(const std::string &dir, int save_mode);
+    void init(const std::string &dir, int save_mode, bool verbose);
 
     bool isInit() { return is_init_; }
     bool isCloudRecordEnabled() { return enable_cloud_record_; }
@@ -66,6 +66,7 @@ private:
     bool is_init_ = false;
     bool enable_cloud_record_ = false;
     bool cloud_enabled_ = false;
+    bool verbose_ = false;
 
     std::string save_dir_;
 };

@@ -1,13 +1,12 @@
 #include "data_recorder.h"
 
-template <typename PointType> DataRecorder<PointType>::DataRecorder() {
-    std::cout << "DataRecorder created\n";
-}
+template <typename PointType> DataRecorder<PointType>::DataRecorder() {}
 
 template <typename PointType>
-void DataRecorder<PointType>::init(const std::string &dir, int save_mode) {
+void DataRecorder<PointType>::init(const std::string &dir, int save_mode, bool verbose) {
     save_dir_ = dir;
     is_init_ = true;
+    verbose_ = verbose;
 
     if (std::filesystem::exists(save_dir_)) {
         std::filesystem::remove_all(save_dir_);
@@ -23,9 +22,11 @@ void DataRecorder<PointType>::init(const std::string &dir, int save_mode) {
         std::filesystem::create_directories(save_dir_ + "/clouds");
     }
 
-    std::cout << "DataRecorder initialized with directory with save_mode: " << save_mode
-              << std::endl;
-    std::cout << "DataRecorder save_dir_: " << save_dir_ << std::endl;
+    if (verbose_) {
+        std::cout << "DataRecorder initialized with directory with save_mode: " << save_mode
+                  << std::endl;
+        std::cout << "DataRecorder save_dir_: " << save_dir_ << std::endl;
+    }
 }
 
 template <typename PointType>
