@@ -100,7 +100,7 @@ template <typename PointType> void DataRecorder<PointType>::saveTime() {
 }
 
 template <typename PointType> void DataRecorder<PointType>::savePose() {
-    std::string pose_path = save_dir_ + "/pose.txt";
+    std::string pose_path = save_dir_ + "/poses.txt";
     std::ofstream pose_file(pose_path);
 
     for (const auto &pose_tuple : pose_recorder_) {
@@ -121,7 +121,7 @@ template <typename PointType> void DataRecorder<PointType>::savePose() {
 }
 
 template <typename PointType> void DataRecorder<PointType>::savePoseWithCov() {
-    std::string pose_path = save_dir_ + "/pose_with_cov.txt";
+    std::string pose_path = save_dir_ + "/poses_w_cov.txt";
     std::ofstream pose_file(pose_path);
 
     for (const auto &pose_tuple : pose_recorder_) {
@@ -152,6 +152,15 @@ template <typename PointType> void DataRecorder<PointType>::savePoseWithCov() {
         pose_file << "\n";
     }
     pose_file.close();
+}
+
+template <typename PointType> void DataRecorder<PointType>::saveStatus(std::string status) {
+    std::string status_path = save_dir_ + "/status.txt";
+    std::ofstream status_file(status_path);
+
+    status_file << status << "\n";
+
+    status_file.close();
 }
 
 template class DataRecorder<RecordPointType>;

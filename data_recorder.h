@@ -50,6 +50,7 @@ public:
     void saveTime();
     void savePose();
     void savePoseWithCov();
+    void saveStatus(std::string status);
 
     void init(const std::string &dir, int save_mode, bool verbose);
 
