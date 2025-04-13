@@ -60,7 +60,7 @@ template <typename PointType> void DataRecorder<PointType>::saveCloud() {
         return;
     }
 
-    std::string stamp_str = std::to_string(static_cast<uint64_t>(record_cloud_.stamp * 1e9));
+    std::string stamp_str = std::to_string(static_cast<uint64_t>(record_cloud_.stamp * 1e6));
     std::string cloud_pcd_path = save_dir_ + "/clouds/" + stamp_str + ".pcd";
     pcl::io::savePCDFileBinary(cloud_pcd_path, *record_cloud_.cloud_ptr);
 
