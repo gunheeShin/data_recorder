@@ -8,7 +8,6 @@ void DataRecorder<PointType>::init(const std::string &dir, int save_mode, bool v
     is_init_ = true;
     verbose_ = verbose;
 
-    // 기존 디렉토리 삭제 및 재생성
     std::string mkdir_cmd = "mkdir -p " + save_dir_ + "/values " + save_dir_ + "/times";
 
     if (save_mode == 2) {
