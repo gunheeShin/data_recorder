@@ -1,6 +1,5 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-// #include <pcl_conversions/pcl_conversions.h>
 
 namespace data_recorder_structure {
 struct ExamplePointType {

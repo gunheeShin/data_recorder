@@ -8,19 +8,27 @@ void DataRecorder<PointType>::init(const std::string &dir, int save_mode, bool v
     is_init_ = true;
     verbose_ = verbose;
 
-    if (std::filesystem::exists(save_dir_)) {
-        std::filesystem::remove_all(save_dir_);
-    }
-    std::filesystem::create_directories(save_dir_);
-
-    std::filesystem::create_directories(save_dir_ + "/values");
-    std::filesystem::create_directories(save_dir_ + "/times");
+    // 기존 디렉토리 삭제 및 재생성
+    std::string mkdir_cmd = "mkdir -p " + save_dir_ + "/values " + save_dir_ + "/times";
 
     if (save_mode == 2) {
         enable_cloud_record_ = true;
-
-        std::filesystem::create_directories(save_dir_ + "/clouds");
+        mkdir_cmd += " " + save_dir_ + "/clouds";
+        std::cout << "Cloud recording enabled. Please make sure the directory is empty"
+                  << std::endl;
     }
+    int ret_mk = system(mkdir_cmd.c_str());
+
+    if (ret_mk != 0) {
+        std::cerr << "[Error] Failed to initialize directories in " << save_dir_ << std::endl;
+        is_init_ = false;
+        return;
+    }
+
+    status_path_ = save_dir_ + "/status.txt";
+    std::ofstream status_file(status_path_);
+    status_file << "Initialized" << std::endl;
+    status_file.close();
 
     if (verbose_) {
         std::cout << "DataRecorder initialized with directory with save_mode: " << save_mode
@@ -60,7 +68,11 @@ template <typename PointType> void DataRecorder<PointType>::saveCloud() {
         return;
     }
 
-    std::string stamp_str = std::to_string(static_cast<uint64_t>(record_cloud_.stamp * 1e6));
+    std::cout << "DataRecorder: Saving cloud to " << save_dir_ + "/clouds/" << std::endl;
+
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(6) << record_cloud_.stamp;
+    std::string stamp_str = oss.str();
     std::string cloud_pcd_path = save_dir_ + "/clouds/" + stamp_str + ".pcd";
     pcl::io::savePCDFileBinary(cloud_pcd_path, *record_cloud_.cloud_ptr);
 
@@ -155,8 +167,7 @@ template <typename PointType> void DataRecorder<PointType>::savePoseWithCov() {
 }
 
 template <typename PointType> void DataRecorder<PointType>::saveStatus(std::string status) {
-    std::string status_path = save_dir_ + "/status.txt";
-    std::ofstream status_file(status_path);
+    std::ofstream status_file(status_path_);
 
     status_file << status << "\n";
 

@@ -1,7 +1,6 @@
 #ifndef DATA_RECORDER_H
 #define DATA_RECORDER_H
 
-#include <filesystem>
 #include <iostream>
 #include <map>
 
@@ -63,6 +62,8 @@ private:
     std::vector<std::tuple<double, PoseWithCov>> pose_recorder_;
 
     cloud_data record_cloud_;
+
+    std::string status_path_;
 
     bool is_init_ = false;
     bool enable_cloud_record_ = false;
