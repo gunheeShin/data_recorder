@@ -10,3 +10,7 @@ target_include_directories(data_recorder PUBLIC
   ${PCL_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
+target_link_libraries(data_recorder
+  ${PCL_LIBRARIES}
+  ${catkin_LIBRARIES}
+)
