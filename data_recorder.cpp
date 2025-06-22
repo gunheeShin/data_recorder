@@ -67,8 +67,6 @@ template <typename PointType> void DataRecorder<PointType>::saveCloud() {
         return;
     }
 
-    std::cout << "DataRecorder: Saving cloud to " << save_dir_ + "/clouds/" << std::endl;
-
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(6) << record_cloud_.stamp;
     std::string stamp_str = oss.str();
