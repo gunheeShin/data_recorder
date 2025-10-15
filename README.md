@@ -5,6 +5,10 @@
    ```bash
    mkdir build && cd build && cmake .. && make
    ```
+   or
+   ```bash
+   bash build.sh
+   ```
 2. Use the package in other projects. In `CMakeLists.txt`, add the following line:
    ```cmake
    target_link_libraries({your_target} {path_to_data_recorder}/build/libdata_recorder.so)
