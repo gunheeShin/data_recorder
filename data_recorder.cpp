@@ -60,8 +60,8 @@ void DataRecorder<PointType>::recordPose(double stamp, const PoseWithCov &pose) 
     pose_recorder_.push_back(std::make_tuple(stamp, pose));
 }
 
-template <typename PointType> void DataRecorder<PointType>::saveCloud() {
-
+template <typename PointType>
+void DataRecorder<PointType>::saveCloud() {
     if (!cloud_enabled_) {
         std::cout << "DataRecorder: saveCloud called, but no cloud recorded!" << std::endl;
         return;
@@ -70,9 +70,20 @@ template <typename PointType> void DataRecorder<PointType>::saveCloud() {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(6) << record_cloud_.stamp;
     std::string stamp_str = oss.str();
-    std::string cloud_pcd_path = save_dir_ + "/clouds/" + stamp_str + ".pcd";
-    pcl::io::savePCDFileBinary(cloud_pcd_path, *record_cloud_.cloud_ptr);
+    std::string cloud_bin_path = save_dir_ + "/clouds/" + stamp_str + ".bin";
+    std::ofstream bin_file(cloud_bin_path, std::ios::out | std::ios::binary);
+    if (!bin_file.is_open()) {
+        std::cerr << "DataRecorder: Failed to open cloud file: " << cloud_bin_path << std::endl;
+        cloud_enabled_ = false;
+        return;
+    }
 
+    for (const auto &pt : record_cloud_.cloud_ptr->points) {
+        float data[4] = {static_cast<float>(pt.x), static_cast<float>(pt.y),
+                         static_cast<float>(pt.z), static_cast<float>(pt.intensity)};
+        bin_file.write(reinterpret_cast<const char *>(data), sizeof(data));
+    }
+    bin_file.close();
     cloud_enabled_ = false;
 }
 
