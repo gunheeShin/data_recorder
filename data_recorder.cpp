@@ -90,10 +90,10 @@ void DataRecorder<PointType>::saveCloud() {
 template <typename PointType> void DataRecorder<PointType>::saveValue() {
     for (const auto &pair : value_recorder_) {
         std::string name = pair.first;
-        std::vector<std::tuple<double, double>> values = pair.second;
+        const auto &values = pair.second;
 
         std::string value_path = save_dir_ + "/values/" + name + ".txt";
-        std::ofstream value_file(value_path);
+        std::ofstream value_file(value_path, std::ios::app);
 
         for (const auto &value : values) {
             value_file << std::fixed << std::setprecision(6) << std::get<0>(value) << " "
@@ -101,15 +101,16 @@ template <typename PointType> void DataRecorder<PointType>::saveValue() {
         }
         value_file.close();
     }
+    value_recorder_.clear();
 }
 
 template <typename PointType> void DataRecorder<PointType>::saveTime() {
     for (const auto &pair : time_recorder_) {
         std::string name = pair.first;
-        std::vector<std::tuple<double, double>> times = pair.second;
+        const auto &times = pair.second;
 
         std::string time_path = save_dir_ + "/times/" + name + ".txt";
-        std::ofstream time_file(time_path);
+        std::ofstream time_file(time_path, std::ios::app);
 
         for (const auto &time : times) {
             time_file << std::fixed << std::setprecision(6) << std::get<0>(time) << " "
@@ -117,11 +118,12 @@ template <typename PointType> void DataRecorder<PointType>::saveTime() {
         }
         time_file.close();
     }
+    time_recorder_.clear();
 }
 
 template <typename PointType> void DataRecorder<PointType>::savePose() {
     std::string pose_path = save_dir_ + "/poses.txt";
-    std::ofstream pose_file(pose_path);
+    std::ofstream pose_file(pose_path, std::ios::app);
 
     for (const auto &pose_tuple : pose_recorder_) {
 
@@ -138,11 +140,12 @@ template <typename PointType> void DataRecorder<PointType>::savePose() {
                   << quat.w() << "\n";
     }
     pose_file.close();
+    pose_recorder_.clear();
 }
 
 template <typename PointType> void DataRecorder<PointType>::savePoseWithCov() {
     std::string pose_path = save_dir_ + "/poses_w_cov.txt";
-    std::ofstream pose_file(pose_path);
+    std::ofstream pose_file(pose_path, std::ios::app);
 
     for (const auto &pose_tuple : pose_recorder_) {
 
@@ -172,6 +175,7 @@ template <typename PointType> void DataRecorder<PointType>::savePoseWithCov() {
         pose_file << "\n";
     }
     pose_file.close();
+    pose_recorder_.clear();
 }
 
 template <typename PointType> void DataRecorder<PointType>::saveStatus(std::string status) {
