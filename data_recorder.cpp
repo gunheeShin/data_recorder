@@ -29,6 +29,10 @@ void DataRecorder<PointType>::init(const std::string &dir, int save_mode, bool v
     status_file << "Initialized" << std::endl;
     status_file.close();
 
+    // 새 기록 세션 시작: append 대상 파일을 초기화해 재실행 시 중복 누적을 방지
+    std::ofstream(save_dir_ + "/poses.txt", std::ios::out | std::ios::trunc).close();
+    std::ofstream(save_dir_ + "/poses_w_cov.txt", std::ios::out | std::ios::trunc).close();
+
     if (verbose_) {
         std::cout << "DataRecorder initialized with directory with save_mode: " << save_mode
                   << std::endl;
